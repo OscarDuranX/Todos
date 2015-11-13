@@ -18,13 +18,19 @@ import android.view.MenuItem;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private static final String SHARED_PREFERENCES_TODOS = "SP_TODOS";
     private static final String TODO_LIST= "todo_list";
 
+
     private Gson gson;
+
+    public TodoArrayList tasks;
+
 
     @Override
     protected void onDestroy(){
@@ -39,22 +45,41 @@ public class MainActivity extends AppCompatActivity
 
 
         SharedPreferences todos = getSharedPreferences(SHARED_PREFERENCES_TODOS, 0);
-        String todoList = todos.getString(TODO_LIST,null);
+        String todoList = todos.getString(TODO_LIST, null);
+
+        if (todoList == null){
+            String initial_json="[\n" +
+                    "        {\"name\": \"Comprar llet\", \"done\": true, \"priority\": 2},\n" +
+                    "        {\"name\": \"Comprar pa\", \"done\": true, \"priority\": 1},\n" +
+                    "        {\"name\": \"Realitzar exercici\", \"done\": false, \"priority\": 3}\n" +
+                    "        ]";
+            SharedPreferences.Editor editor = todos.edit();
+            editor.putString(SHARED_PREFERENCES_TODOS, initial_json);
+            editor.commit();
+            todoList = todos.getString(TODO_LIST, null);
+        }
 
 
         gson = new Gson();
         /*
+
         [
         {"name": "Comprar llet", "done": true, "priority": 2},
         {"name": "Comprar pa", "done": true, "priority": 1},
         {"name": "Realitzar exercici", "done": false, "priority": 3}
-
         ]
+
         */
 
 
-        Type arrayTodoList = new TypeToken<TodoArrayList> {}.getType();
-        gson.fromJson(todoList,arrayTodoList);
+        Type arrayTodoList = new TypeToken<TodoArrayList>() {}.getType();
+        TodoArrayList temp = gson.fromJson(todoList, arrayTodoList);
+
+        if(temp != null){
+            tasks = temp;
+        }else{
+            //Error TODO
+        }
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
