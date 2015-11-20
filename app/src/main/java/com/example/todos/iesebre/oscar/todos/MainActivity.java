@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -54,10 +57,17 @@ public class MainActivity extends AppCompatActivity
                     "        {\"name\": \"Realitzar exercici\", \"done\": false, \"priority\": 3}\n" +
                     "        ]";
             SharedPreferences.Editor editor = todos.edit();
-            editor.putString(SHARED_PREFERENCES_TODOS, initial_json);
+            editor.putString(TODO_LIST, initial_json);
             editor.commit();
             todoList = todos.getString(TODO_LIST, null);
         }
+
+//        Log.d("prova",todoList);
+
+//        Snackbar.make(view, todoList, Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+
+        Toast.makeText(this, todoList, Toast.LENGTH_LONG).show();
 
 
         gson = new Gson();
@@ -81,8 +91,14 @@ public class MainActivity extends AppCompatActivity
             //Error TODO
         }
 
+        ListView todoslv = (ListView) findViewById(R.id.todolistview);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        adapter = new CustomListAdapter(this, tasks);
+        todoslv.setAdapter(adapter);
+
+
+        Toolbar toolbar = (Toolbar)
+                findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
