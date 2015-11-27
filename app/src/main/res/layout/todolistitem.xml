@@ -8,8 +8,14 @@
 
     <TextView
         android:id="@+id/todolistitemtext"
-        android:layout_width=""
-        android:layout_height=""
+        android:layout_width="fill_parent"
+        android:layout_height="62dp"
+        android:paddingLeft="10dp"
+        android:text="Tasca de prova"
+        android:gravity="center_vertical"
+        android:textSize="25sp"
+        android:onClick="updateTask"
+        android:clickable="true"
 
         />
 

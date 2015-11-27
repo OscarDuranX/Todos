@@ -28,11 +28,13 @@ public class MainActivity extends AppCompatActivity
 
     private static final String SHARED_PREFERENCES_TODOS = "SP_TODOS";
     private static final String TODO_LIST= "todo_list";
-
+    
+    
 
     private Gson gson;
 
     public TodoArrayList tasks;
+    private CustomListAdapter adapter;
 
 
     @Override
