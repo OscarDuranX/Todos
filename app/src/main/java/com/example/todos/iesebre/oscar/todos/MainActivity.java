@@ -1,12 +1,9 @@
 package com.example.todos.iesebre.oscar.todos;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,9 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -28,8 +28,8 @@ public class MainActivity extends AppCompatActivity
 
     private static final String SHARED_PREFERENCES_TODOS = "SP_TODOS";
     private static final String TODO_LIST= "todo_list";
-    
-    
+
+
 
     private Gson gson;
 
@@ -41,6 +41,16 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy(){
         super.onDestroy();
     }
+
+   /* protected void onStop(){
+        super.onStop;
+
+
+        SharedPreferences.Editor editor = todos.edit();
+        editor.putString(TODO_LIST, initial_json);
+        editor.commit();
+        todoList = todos.getString(TODO_LIST, null);
+    }*/
 
 
     @Override
@@ -57,6 +67,7 @@ public class MainActivity extends AppCompatActivity
                     "        {\"name\": \"Comprar llet\", \"done\": true, \"priority\": 2},\n" +
                     "        {\"name\": \"Comprar pa\", \"done\": true, \"priority\": 1},\n" +
                     "        {\"name\": \"Realitzar exercici\", \"done\": false, \"priority\": 3}\n" +
+                    "        {\"name\": \"Estudiar\", \"done\": true, \"priority\": 4}\n" +
                     "        ]";
             SharedPreferences.Editor editor = todos.edit();
             editor.putString(TODO_LIST, initial_json);
@@ -69,7 +80,7 @@ public class MainActivity extends AppCompatActivity
 //        Snackbar.make(view, todoList, Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
 
-        Toast.makeText(this, todoList, Toast.LENGTH_LONG).show();
+        //Toast.makeText(this, todoList, Toast.LENGTH_LONG).show();
 
 
         gson = new Gson();
@@ -79,6 +90,7 @@ public class MainActivity extends AppCompatActivity
         {"name": "Comprar llet", "done": true, "priority": 2},
         {"name": "Comprar pa", "done": true, "priority": 1},
         {"name": "Realitzar exercici", "done": false, "priority": 3}
+        {"name": "Estudiar", "done": true, "priority": 4}
         ]
 
         */
@@ -110,8 +122,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+//                startActivity(intent);
 
 //                Snackbar.make(view, "Replace with your own action Prova!", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
@@ -127,6 +139,8 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -183,5 +197,55 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+    public void showAddTodoForm(View view) {
+        taskName = "";
+        EditText taskNameText;
+
+        MaterialDialog dialog @Override
+        public void beforeTextChanged (CharSequence s, int start, int count, int after) {
+        } = new MaterialDialog.Builder(this).
+                title("Afegir tasca").
+                customView(R.layout.form_add_task, true).
+                negativeText("Cancel·ler").
+                positiveText("Afegir").
+                negativeColor(Color.parseColor("#2195F3")).
+                positiveColor(Color.parseColor("#2195F3")).
+                onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        final TodoItem todoItem = new TodoItem();
+                        todoItem.setDone(true);
+                        todoItem.setName("prova");
+                        todoItem.setPriority(1);
+
+                        tasks.add(todoItem);
+                        adapter.notifyDataSetChanged();
+                    }
+                }).
+                build();
+
+        dialog.show();
+
+        //taskNameText= (EditText) dialog.getCustomView().findViewById(R.id.task_title);
+
+//        final TodoItem todoItem = new TodoItem();
+//        todoItem.setDone(true);
+//        todoItem.setName("prova");
+//        todoItem.setPriority(5);
+//
+//        tasks.add(todoItem);
+////      tasks.remove(1);
+//        adapter.notifyDataSetChanged();
+
+
+
+
+
+
+
     }
 }

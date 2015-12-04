@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/addtaskdialog"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    >
+
+    <EditText
+        android:id="@+id/task_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:hint="Nom tasca"
+        />
+    <EditText
+        android:id="@+id/task_done"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:hint="done tasca"
+        />
+    <EditText
+        android:id="@+id/Priority"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:inputType="textCapSentences"
+        android:maxLines="1"
+        android:hint="Priority tasca"
+        />
+
+</LinearLayout>

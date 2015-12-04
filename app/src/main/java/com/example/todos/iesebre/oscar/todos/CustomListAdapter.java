@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -45,6 +46,13 @@ public class CustomListAdapter extends BaseAdapter {
         }else{
 
         }
+
+        TextView tv =(TextView) convertView.findViewById(R.id.todolistitemtext);
+
+        //tv.setText("Prova");
+        tv.setText(list.get(position).getName()+
+                " p: "+list.get(position).getPriority()+
+                " done: "+ list.get(position).isDone());
 
         return convertView;
     }
