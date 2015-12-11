@@ -10,6 +10,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +34,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private Gson gson;
-
     public TodoArrayList tasks;
     private CustomListAdapter adapter;
+    private SharedPreferences sharedPreferenceDades;
 
 
     @Override
@@ -57,6 +59,12 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar)
+                findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+       // findViewById(R.id.fab_add).setOnClickListener(this);
+       // findViewById(R.id.fab_del).setOnClickListener(this);
 
 
         SharedPreferences todos = getSharedPreferences(SHARED_PREFERENCES_TODOS, 0);
@@ -111,14 +119,13 @@ public class MainActivity extends AppCompatActivity
         todoslv.setAdapter(adapter);
 
 
-        Toolbar toolbar = (Toolbar)
-                findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+
+        //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
+        /*fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -128,7 +135,7 @@ public class MainActivity extends AppCompatActivity
 //                Snackbar.make(view, "Replace with your own action Prova!", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
             }
-        });
+        });*/
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -202,12 +209,11 @@ public class MainActivity extends AppCompatActivity
 
 
     public void showAddTodoForm(View view) {
-        taskName = "";
-        EditText taskNameText;
 
-        MaterialDialog dialog @Override
-        public void beforeTextChanged (CharSequence s, int start, int count, int after) {
-        } = new MaterialDialog.Builder(this).
+        final EditText taskNameText;
+
+        MaterialDialog dialog
+        = new MaterialDialog.Builder(this).
                 title("Afegir tasca").
                 customView(R.layout.form_add_task, true).
                 negativeText("Cancel·ler").
@@ -230,7 +236,7 @@ public class MainActivity extends AppCompatActivity
 
         dialog.show();
 
-        //taskNameText= (EditText) dialog.getCustomView().findViewById(R.id.task_title);
+        taskNameText= (EditText) dialog.getCustomView().findViewById(R.id.task_title);
 
 //        final TodoItem todoItem = new TodoItem();
 //        todoItem.setDone(true);
@@ -240,7 +246,22 @@ public class MainActivity extends AppCompatActivity
 //        tasks.add(todoItem);
 ////      tasks.remove(1);
 //        adapter.notifyDataSetChanged();
+        taskNameText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //taskName = s.toString();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
 
