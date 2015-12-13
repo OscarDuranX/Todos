@@ -211,12 +211,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    public  void showDeleteTodoForm(View v){
-
-        tasks.remove(1);
-        adapter.notifyDataSetChanged();
-
-    }
 
 
     View positiveAction;
@@ -288,6 +282,17 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void showDeleteTodoForm(View view) {
+
+        for (int i = tasks.size() - 1; i >= 0; i--) {
+            if (tasks.get(i).isDone()) {
+                tasks.remove(i);
+            }
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+
     public void editTask(final int position) {
 
         final EditText taskNameText;
@@ -312,7 +317,6 @@ public class MainActivity extends AppCompatActivity
                             tasks.get(position).setDone(false);
                         }
 
-                        // Task priority
                         RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.Priority);
 
                         switch (taskPriority.getCheckedRadioButtonId()) {
