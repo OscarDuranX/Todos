@@ -1,10 +1,15 @@
 package com.example.todos.iesebre.oscar.todos;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,7 +44,7 @@ public class CustomListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         if(convertView ==null) {
             convertView = layputInflater.inflate(R.layout.todolistitem, null);
@@ -47,13 +52,66 @@ public class CustomListAdapter extends BaseAdapter {
 
         }
 
-        TextView tv =(TextView) convertView.findViewById(R.id.TaskName);
+       /* TextView tv =(TextView) convertView.findViewById(R.id.TaskName);
 
         //tv.setText("Prova");
         tv.setText(list.get(position).getName()+
                 " p: "+list.get(position).getPriority()+
-                " done: "+ list.get(position).isDone());
+                " done: "+ list.get(position).isDone());*/
+
+        final TextView tv = (TextView) convertView.findViewById(R.id.TaskName);
+        final CheckBox done = (CheckBox) convertView.findViewById(R.id.checkboxDone);
+
+        tv.setText(list.get(position).getName());
+        tv.setPaintFlags(0);
+
+        done.setChecked(list.get(position).isDone());
+
+        int urgentColor = Color.parseColor("#fe0000");
+        int mediumColor = Color.parseColor("#0099ff");
+        int notUrgentColor = Color.parseColor("#00ff19");
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if(list.get(position).getPriority() == 1) {done.setButtonTintList(ColorStateList.valueOf(urgentColor));}
+            if(list.get(position).getPriority() == 2){done.setButtonTintList(ColorStateList.valueOf(mediumColor));}
+            if(list.get(position).getPriority() == 3){done.setButtonTintList(ColorStateList.valueOf(notUrgentColor));}
+        } else {
+            if(list.get(position).getPriority() == 1){done.setBackgroundColor(urgentColor);}
+            if(list.get(position).getPriority() == 2){done.setBackgroundColor(mediumColor);}
+            if(list.get(position).getPriority() == 3){done.setBackgroundColor(notUrgentColor);}
+        }
+
+        showDone(tv,done, position);
+
+        done.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDone(tv,done,position);
+            }
+        });
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) context).editTask(position);
+            }
+        });
 
         return convertView;
+
+    }
+
+    private void showDone(TextView tv, CheckBox done, int position)
+    {
+        if (!done.isChecked()) {
+            done.setChecked(false);
+            list.get(position).setDone(false);
+            tv.setPaintFlags(0);
+        } else {
+            done.setChecked(true);
+            list.get(position).setDone(true);
+            tv.setPaintFlags(tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        }
     }
 }

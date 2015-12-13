@@ -126,6 +126,8 @@ public class MainActivity extends AppCompatActivity
 
 
 
+
+
         //FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         /*fab.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +243,7 @@ public class MainActivity extends AppCompatActivity
                         todoItem.setName(taskTitle);
 
 
-                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.task_priority);
+                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.Priority);
 
                         switch (taskPriority.getCheckedRadioButtonId()) {
                             case R.id.task_priority_urgent:
@@ -311,7 +313,7 @@ public class MainActivity extends AppCompatActivity
                         }
 
                         // Task priority
-                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.task_priority);
+                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.Priority);
 
                         switch (taskPriority.getCheckedRadioButtonId()) {
                             case R.id.task_priority_urgent:
@@ -360,7 +362,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        checkPriority = (RadioGroup) dialog.getCustomView().findViewById(R.id.task_priority);
+        checkPriority = (RadioGroup) dialog.getCustomView().findViewById(R.id.Priority);
         if (tasks.get(position).getPriority() == 1) {
             checkPriority.check(R.id.task_priority_urgent);
         }
