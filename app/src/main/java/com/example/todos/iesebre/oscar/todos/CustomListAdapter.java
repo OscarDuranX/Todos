@@ -47,7 +47,7 @@ public class CustomListAdapter extends BaseAdapter {
 
         }
 
-        TextView tv =(TextView) convertView.findViewById(R.id.todolistitemtext);
+        TextView tv =(TextView) convertView.findViewById(R.id.TaskName);
 
         //tv.setText("Prova");
         tv.setText(list.get(position).getName()+

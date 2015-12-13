@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/addtaskdialog"
+    android:id="@+id/formaddtask"
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal">
@@ -14,21 +14,40 @@
         android:maxLines="1"
         android:hint="Nom tasca"
         />
-    <EditText
-        android:id="@+id/task_done"
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:inputType="textCapSentences"
-        android:maxLines="1"
-        android:hint="done tasca"
-        />
-    <EditText
-        android:id="@+id/Priority"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:inputType="textCapSentences"
-        android:maxLines="1"
-        android:hint="Priority tasca"
-        />
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:text="Priority" />
+
+    <RadioGroup
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/task_priority">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/task_priority_not_urgent"
+            android:checked="true"
+            android:buttonTint="@color/green"/>/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/task_priority_important_not_urgent"
+            android:checked="false"
+            android:buttonTint="@color/orange"/>
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/task_priority_urgent"
+            android:checked="false"
+            android:buttonTint="@color/red"/>
+    </RadioGroup>
 
 </LinearLayout>

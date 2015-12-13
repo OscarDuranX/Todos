@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioGroup;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -37,6 +38,8 @@ public class MainActivity extends AppCompatActivity
     public TodoArrayList tasks;
     private CustomListAdapter adapter;
     private SharedPreferences sharedPreferenceDades;
+
+    private String taskTitle;
 
 
     @Override
@@ -206,14 +209,24 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    public  void showDeleteTodoForm(View v){
 
+        tasks.remove(1);
+        adapter.notifyDataSetChanged();
+
+    }
+
+
+    View positiveAction;
 
     public void showAddTodoForm(View view) {
 
-        final EditText taskNameText;
+        EditText taskTitleText;
+
+        taskTitle = "";
 
         MaterialDialog dialog
-        = new MaterialDialog.Builder(this).
+                = new MaterialDialog.Builder(this).
                 title("Afegir tasca").
                 customView(R.layout.form_add_task, true).
                 negativeText("Cancel·ler").
@@ -224,9 +237,23 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                         final TodoItem todoItem = new TodoItem();
-                        todoItem.setDone(true);
-                        todoItem.setName("prova");
-                        todoItem.setPriority(1);
+                        todoItem.setDone(false);
+                        todoItem.setName(taskTitle);
+
+
+                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.task_priority);
+
+                        switch (taskPriority.getCheckedRadioButtonId()) {
+                            case R.id.task_priority_urgent:
+                                todoItem.setPriority(1);
+                                break;
+                            case R.id.task_priority_important_not_urgent:
+                                todoItem.setPriority(2);
+                                break;
+                            case R.id.task_priority_not_urgent:
+                                todoItem.setPriority(3);
+                                break;
+                        }
 
                         tasks.add(todoItem);
                         adapter.notifyDataSetChanged();
@@ -236,17 +263,11 @@ public class MainActivity extends AppCompatActivity
 
         dialog.show();
 
-        taskNameText= (EditText) dialog.getCustomView().findViewById(R.id.task_title);
+        taskTitleText = (EditText) dialog.getCustomView().findViewById(R.id.task_title);
+        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        positiveAction.setEnabled(false);
 
-//        final TodoItem todoItem = new TodoItem();
-//        todoItem.setDone(true);
-//        todoItem.setName("prova");
-//        todoItem.setPriority(5);
-//
-//        tasks.add(todoItem);
-////      tasks.remove(1);
-//        adapter.notifyDataSetChanged();
-        taskNameText.addTextChangedListener(new TextWatcher() {
+        taskTitleText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -254,7 +275,8 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                //taskName = s.toString();
+                taskTitle = s.toString();
+                positiveAction.setEnabled(taskTitle.trim().length() > 0);
             }
 
             @Override
@@ -262,6 +284,99 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+    }
+
+    public void editTask(final int position) {
+
+        final EditText taskNameText;
+        RadioGroup checkPriority;
+
+        MaterialDialog dialog = new MaterialDialog.Builder(this).
+                title("Update Task").
+                customView(R.layout.form_add_task, true).
+                negativeText("Cancel").
+                positiveText("Update").
+                negativeColor(Color.parseColor("#ff3333")).
+                positiveColor(Color.parseColor("#2196F3")).
+                onPositive(new MaterialDialog.SingleButtonCallback() {
+
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+
+                        tasks.get(position).setName(taskTitle);
+                        if (tasks.get(position).isDone() == true) {
+                            tasks.get(position).setDone(true);
+                        } else {
+                            tasks.get(position).setDone(false);
+                        }
+
+                        // Task priority
+                        RadioGroup taskPriority = (RadioGroup) dialog.findViewById(R.id.task_priority);
+
+                        switch (taskPriority.getCheckedRadioButtonId()) {
+                            case R.id.task_priority_urgent:
+                                tasks.get(position).setPriority(1);
+                                break;
+                            case R.id.task_priority_important_not_urgent:
+                                tasks.get(position).setPriority(2);
+                                break;
+                            case R.id.task_priority_not_urgent:
+                                tasks.get(position).setPriority(3);
+                                break;
+                        }
+
+                        adapter.notifyDataSetChanged();
+                    }
+                }).
+
+
+                build();
+
+        dialog.show();
+
+        taskNameText = (EditText) dialog.getCustomView().findViewById(R.id.task_title);
+        taskNameText.append(tasks.get(position).getName());
+        taskTitle = taskNameText.getText().toString();
+
+        positiveAction = dialog.getActionButton(DialogAction.POSITIVE);
+        positiveAction.setEnabled(false);
+
+        taskNameText.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                taskTitle = s.toString();
+                positiveAction.setEnabled(taskTitle.trim().length() > 0);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        checkPriority = (RadioGroup) dialog.getCustomView().findViewById(R.id.task_priority);
+        if (tasks.get(position).getPriority() == 1) {
+            checkPriority.check(R.id.task_priority_urgent);
+        }
+        if (tasks.get(position).getPriority() == 2) {
+            checkPriority.check(R.id.task_priority_important_not_urgent);
+        }
+        if (tasks.get(position).getPriority() == 3) {
+            checkPriority.check(R.id.task_priority_not_urgent);
+        }
+
+        checkPriority.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup taskPriority, int checkedId) {
+                positiveAction.setEnabled(true);
+            }
+        });
+
 
 
 
